@@ -36,7 +36,7 @@ export default class Tuner {
       let frequency = this.pitchFinder(data);
       // frequency = this.HPS.do_processing(data)
       const note = this.getNote(frequency);
-      console.log(this.noteStrings[note % 12])
+
       if (frequency && this.onNoteDetected) {
         const note = this.getNote(frequency);
         this.onNoteDetected({

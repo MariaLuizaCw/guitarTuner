@@ -10,10 +10,11 @@ import {
 import Tuner from "./tuner";
 import Note from "./note";
 import Meter from "./meter";
+import Notebtn from './noteBtn'
 
 export default class Main extends Component {
 
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       note: {
@@ -22,15 +23,15 @@ export default class Main extends Component {
         frequency: 440,
       },
     };
-  } 
+  }
 
 
   _update(note) {
     this.setState({ note });
   }
 
-  onPressStartTunning(){
-   
+  onPressStartTunning() {
+
 
     console.log('cliquei em start')
     this.state.tuner.start();
@@ -42,7 +43,7 @@ export default class Main extends Component {
     //   }
     // };
   }
-  onPressStopTunning(){
+  onPressStopTunning() {
     this.state.tuner.stop();
   }
 
@@ -52,7 +53,7 @@ export default class Main extends Component {
         PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
       ]);
     }
-    
+
     const tuner = new Tuner();
     tuner.onNoteDetected = (note) => {
       if (this._lastNoteName === note.name) {
@@ -67,23 +68,16 @@ export default class Main extends Component {
   render() {
     return (
       <View style={style.body}>
-        <Text>Teste</Text>
+      
         <StatusBar backgroundColor="#000" translucent />
         <Meter cents={this.state.note.cents} />
         <Note {...this.state.note} />
         <Text style={style.frequency}>
           {this.state.note.frequency.toFixed(1)} Hz
         </Text>
-        {/* <Button
-          onPress={this.onPressStartTunning}
-          title="Start"
-          color="#841584"
-        />
-        <Button
-          onPress={this.onPressStopTunning}
-          title="Stop"
-          color="#413444"
-        /> */}
+        <View style={ style.btns}>
+          <Notebtn></Notebtn>
+        </View>
       </View>
     );
   }
@@ -94,6 +88,12 @@ const style = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  btns: {
+    position: 'absolute', 
+    left: 0, 
+    right: 0, 
+    bottom: 0
   },
   frequency: {
     fontSize: 28,
