@@ -19,7 +19,7 @@ export default class Tuner {
     "B",
   ];
 
-  constructor(sampleRate = 8000, bufferSize = 512) {
+  constructor(sampleRate = 4000, bufferSize = 512) {
     this.sampleRate = sampleRate;
     this.bufferSize = bufferSize;
     

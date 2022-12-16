@@ -1,6 +1,6 @@
 
 import React, { PureComponent } from "react";
-import { View, StyleSheet, TouchableOpacity, Text, Triangle } from "react-native";
+import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
 
 const Notebtn = () =>  {
     const [selection, setSelection] = React.useState('C');
@@ -31,7 +31,6 @@ const Notebtn = () =>  {
 	}
     return (
       <View>
-        <Triangle style={styles.triangleRight}></Triangle>
 
         <View style={styles.btnGroup}>
           {btns}
@@ -48,9 +47,6 @@ const styles = StyleSheet.create({
     borderBottomColor: '#6B7280'
   },
 
-  triangleRight: {
-    transform: [{ rotate: "90deg" }],
-  },
   btn: {
       flex: 1,
       borderRightWidth: 0.25,
