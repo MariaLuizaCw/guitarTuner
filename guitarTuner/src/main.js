@@ -162,16 +162,16 @@ export default class Main extends Component {
   _generateBtns() {
     const noteStrings = [
       "C",
-      "C♯",
+      "C#",
       "D",
-      "D♯",
+      "D#",
       "E",
       "F",
-      "F♯",
+      "F#",
       "G",
-      "G♯",
+      "G#",
       "A",
-      "A♯",
+      "A#",
       "B",
     ];
     const btns = []
@@ -188,14 +188,18 @@ export default class Main extends Component {
   }
   _setSelectedNote(selection) {
     oct = this.state.selectedNote.octave
+    
+   
     this.setState({ ...this.state, selectedNote: {
       name:  selection,
       frequency: this.map[`${selection}`][oct],
       octave: oct
-     }})
+      }})
+    
   }
   _update(note) {
     this.setState({ ...this.state, note });
+    console.log(this.state.selectedNote.frequency)
     console.log(this.state.selectedNote.frequency - this.state.note.frequency)
 
   }
@@ -217,18 +221,70 @@ export default class Main extends Component {
     };
     tuner.start();
   }
+  _encrementOctave(){
+    oct = this.state.selectedNote.octave
+    if (oct >= 8){
+      return
+    }
 
+
+    this.setState({ ...this.state, selectedNote: {
+      name:  this.state.selectedNote.name,
+      frequency: this.map[`${this.state.selectedNote.name}`][oct+1],
+      octave: oct+1
+      }})
+    
+  
+  }
+  
+  _dencrementOctave(){
+    oct = this.state.selectedNote.octave
+    if (oct <= 0){
+      return
+    }
+    
+    this.setState({ ...this.state, selectedNote: {
+      name:  this.state.selectedNote.name,
+      frequency: this.map[`${this.state.selectedNote.name}`][oct-1],
+      octave: oct-1
+    }})
+     
+  }
+  _generateOctaves(){
+    const btns = []
+
+    for (let i = 0; i < 9; i++) {
+
+      btns.push(
+        <TouchableOpacity key={i} style={[style.btn, this.state.selectedNote.octave == i ? { backgroundColor: "#6B7280" } : null]} onPress={() => this._setSelectedNote(noteStrings[i])}>
+          <Text style={[style.btnText, this.state.selectedNote.octave == i ? { color: "white" } : null]}>{i}</Text>
+        </TouchableOpacity>
+      )
+    }
+    return btns
+  }
   render() {
     return (
       <View style={style.body}>
-        <View>
-        </View>
+      
         <StatusBar backgroundColor="#000" translucent />
         <Meter cents={this.state.note.cents} />
         <Note {...this.state.note} />
         <Text style={style.frequency}>
           {this.state.note.frequency.toFixed(1)} Hz
         </Text>
+        <View style={style.plusminus}>
+          <TouchableOpacity style={[style.btnplusminus]} onPress={() => this._encrementOctave()}>
+            <Text style={[style.btnTextplusminus]}>+</Text>
+          </TouchableOpacity>
+          <View>
+          <Text style={[style.btnText]}>Octave: {this.state.selectedNote.octave}</Text>
+          </View>
+          
+          <TouchableOpacity style={[style.btnplusminus]} onPress={() => this._dencrementOctave()}>
+            <Text style={[style.btnTextplusminus]}>-</Text>
+          </TouchableOpacity>
+        </View>
         <View style={style.btnGroup}>
           {this._generateBtns()}
         </View>
@@ -243,7 +299,15 @@ const style = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  plusminus: {
+    flexDirection: 'row',
+    alignItems: "center",
+    justifyContent: "space-around",
+    height: '10%',
+    width: '100%',
 
+    marginTop: 50
+  },
   btnGroup: {
     flexDirection: 'row',
     alignItems: "center",
@@ -253,7 +317,19 @@ const style = StyleSheet.create({
     bottom: 0,
     left: 0
   },
-
+  btnTextplusminus:{
+    color: 'white',
+    textAlign: 'center',
+    paddingVertical: 10,
+    fontSize: 14
+  },  
+  btnplusminus: {
+    height: 40,
+    width: 40,
+    borderRadius: 10,
+    backgroundColor: "#6B7280",
+    color: 'white'
+  },
   btn: {
     flex: 1,
     borderRightWidth: 0.25,
