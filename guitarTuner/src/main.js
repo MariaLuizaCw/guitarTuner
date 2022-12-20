@@ -1,5 +1,10 @@
 import React, { Component } from "react";
 import { LogBox } from 'react-native';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons/faArrowLeft'
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons/faArrowRight'
+import { faCheck } from '@fortawesome/free-solid-svg-icons/faCheck'
+
 LogBox.ignoreLogs(['new NativeEventEmitter']); // Ignore log notification by message
 LogBox.ignoreAllLogs(); //Ignore all log notifications
 import {
@@ -31,7 +36,8 @@ export default class Main extends Component {
         name: "A",
         octave: 4,
         frequency: 440
-      }
+      },
+      go: 'check'
     }
     this.map = {
       'C': [16.351,
@@ -197,11 +203,20 @@ export default class Main extends Component {
       }})
     
   }
+  _setGo(newDirection){
+    
+    this.setState({ ...this.state, go: newDirection})
+  }
   _update(note) {
     this.setState({ ...this.state, note });
-    console.log(this.state.selectedNote.frequency)
-    console.log(this.state.selectedNote.frequency - this.state.note.frequency)
-
+    diff = this.state.selectedNote.frequency - this.state.note.frequency
+    if(diff > 1){
+      this._setGo('right')
+    } else if (diff < -1){
+      this._setGo('left')
+    } else {
+      this._setGo('check')
+    }
   }
 
   async componentDidMount() {
@@ -266,10 +281,23 @@ export default class Main extends Component {
   render() {
     return (
       <View style={style.body}>
-      
+        <View style={style.icons} >
+        { 
+          this.state.go == 'left' && 
+          <FontAwesomeIcon icon={faArrowLeft}/>
+        }
+        { 
+          this.state.go == 'right' && 
+          <FontAwesomeIcon icon={faArrowRight}/>
+        }
+        { 
+          this.state.go == 'check' && 
+          <FontAwesomeIcon icon={faCheck}/>
+        }
+        </View>
         <StatusBar backgroundColor="#000" translucent />
         <Meter cents={this.state.note.cents} />
-        <Note {...this.state.note} />
+        <Note {...this.state.note} go={this.state.go} />
         <Text style={style.frequency}>
           {this.state.note.frequency.toFixed(1)} Hz
         </Text>
@@ -304,6 +332,15 @@ const style = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-around",
     height: '10%',
+    width: '100%',
+
+    marginTop: 50
+  },
+  icons: {
+    flexDirection: 'row',
+    alignItems: "center",
+    justifyContent: "space-around",
+    height: '5%',
     width: '100%',
 
     marginTop: 50

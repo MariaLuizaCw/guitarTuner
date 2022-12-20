@@ -5,8 +5,8 @@ export default class Note extends PureComponent {
   render() {
     return (
       <View style={style.note}>
-        <Text style={style.name}>{this.props.name[0]}</Text>
-        <Text style={style.octave}>{this.props.octave}</Text>
+        <Text style={this.props.go == 'check' ? style.nameGreen : style.nameRed}>{this.props.name[0]}</Text>
+        <Text style={this.props.go == 'check' ? style.octaveGreen : style.octaveRed}>{this.props.octave}</Text>
         <Text style={style.sharp}>{this.props.name[1]}</Text>
       </View>
     );
@@ -19,7 +19,13 @@ const style = StyleSheet.create({
     height: 146,
     marginBottom: 10,
   },
-  name: {
+  nameGreen: {
+    fontSize: 128,
+    fontWeight: "600",
+    color: "#228B22",
+    flexDirection: "row",
+  },
+  nameRed: {
     fontSize: 128,
     fontWeight: "600",
     color: "#c62828",
@@ -38,9 +44,16 @@ const style = StyleSheet.create({
       },
     }),
   },
-  octave: {
+  octaveRed: {
     fontSize: 32,
     color: "#c62828",
+    position: "absolute",
+    right: 0,
+    bottom: 0,
+  },
+  octaveGreen: {
+    fontSize: 32,
+    color: "#228B22",
     position: "absolute",
     right: 0,
     bottom: 0,
